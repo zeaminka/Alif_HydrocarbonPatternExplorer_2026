@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alif's Visual Pattern – Hydrocarbon Simulation</title>
+<style>
+  :root {
+    --alkana: #F5A623;
+    --alkena: #7ED321;
+    --alkuna: #4A90D9;
+    --bg: #0A0A0A;
+    --surface: #141414;
+    --border: #2A2A2A;
+    --text: #F0F0F0;
+    --muted: #666;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: Arial, Helvetica, sans-serif; font-stretch: normal; padding: 20px; }
+
+  header {
+    text-align: center; margin-bottom: 20px; padding: 18px;
+    border: 1px solid var(--border); background: var(--surface);
+  }
+  header h1 { font-family: Arial, sans-serif; font-size: 24px; font-weight: 800; margin-bottom: 6px; }
+  header h1 span { color: var(--alkana); }
+  header p { font-size: 10px; color: var(--muted); letter-spacing: 2px; text-transform: uppercase; }
+
+  .formula-box {
+    text-align: center; padding: 14px;
+    background: #1A1A1A; border: 2px solid #FFFFFF;
+    margin-bottom: 0px; font-family: Arial, sans-serif;
+    font-size: 22px; font-weight: 900; color: #FFFFFF; letter-spacing: 2px;
+  }
+  .unifies-label {
+    text-align: center; padding: 8px 0;
+    font-size: 13px; color: #666; font-family: Arial, sans-serif;
+    font-style: italic; letter-spacing: 1px;
+    margin-bottom: 0px;
+  }
+  .three-formulas {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px; margin-bottom: 16px;
+  }
+  .fcard {
+    text-align: center; padding: 12px 6px;
+    background: #1A1A1A; border: 2px solid;
+  }
+  .fcard .frule {
+    font-size: 16px; font-weight: 900;
+    font-family: Arial, sans-serif; margin-bottom: 4px;
+  }
+  .fcard .fname {
+    font-size: 12px; font-weight: 700;
+    font-family: Arial, sans-serif; color: #aaa;
+  }
+
+  .controls { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+
+  /* Div-based chain styles — works on all browsers including iOS Safari */
+  .chain-row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; -webkit-justify-content: center; justify-content: center; flex-wrap: nowrap; }
+  .carbon-unit { display: -webkit-inline-flex; display: inline-flex; -webkit-flex-direction: column; flex-direction: column; -webkit-align-items: center; align-items: center; }
+  .c-top-row { display: -webkit-flex; display: flex; -webkit-justify-content: center; justify-content: center; }
+  .c-mid-row { display: -webkit-flex; display: flex; -webkit-align-items: center; align-items: center; }
+  .c-bot-row { display: -webkit-flex; display: flex; -webkit-justify-content: center; justify-content: center; }
+  .atom-c {
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: center; justify-content: center;
+    font-weight: 900; font-family: Arial, sans-serif;
+    background: #1E1E1E;
+  }
+  .atom-h {
+    display: -webkit-flex; display: flex;
+    -webkit-align-items: center; align-items: center;
+    -webkit-justify-content: center; justify-content: center;
+    font-weight: 700; font-family: Arial, sans-serif;
+    background: transparent;
+    color: #DDDDDD; border-color: #DDDDDD;
+  }
+  .atom-h.faded { color: #2A2A2A; border-color: #2A2A2A; }
+  .atom-empty { background: transparent; border: none; }
+  .chain-label-row { display: -webkit-flex; display: flex; -webkit-justify-content: center; justify-content: center; margin-top: 6px; }
+  .chain-formula-row { display: -webkit-flex; display: flex; -webkit-justify-content: center; justify-content: center; margin-top: 4px; color: #888; font-family: Arial, sans-serif; }
+
+  /* Mobile portrait: stack controls vertically */
+  @media (max-width: 600px) {
+    .controls { grid-template-columns: 1fr; }
+    body { padding: 12px; }
+    .sbtn { font-size: 14px; padding: 12px 4px; }
+    .ratio-col { padding: 10px 14px; }
+    .ratio-num { font-size: 36px; }
+  }
+
+  .ctrl { background: var(--surface); border: 1px solid var(--border); padding: 14px; }
+  .ctrl label { display: block; font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+
+  .series-btns { display: flex; gap: 6px; }
+  .sbtn {
+    flex: 1; padding: 13px 4px; border: 1px solid var(--border);
+    background: transparent; color: var(--text); font-family: Arial, sans-serif;
+    font-size: 15px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: all 0.15s;
+  }
+  .sbtn.alkana.active { background: var(--alkana); color: #000; border-color: var(--alkana); }
+  .sbtn.alkena.active { background: var(--alkena); color: #000; border-color: var(--alkena); }
+  .sbtn.alkuna.active { background: var(--alkuna); color: #fff; border-color: var(--alkuna); }
+
+  input[type=range] { width: 100%; }
+  .n-val { text-align: center; font-size: 28px; font-family: Arial, sans-serif; font-weight: 800; margin-top: 6px; }
+
+  .viz {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 28px 20px; margin-bottom: 16px;
+    overflow-x: auto; display: flex; flex-direction: column;
+    align-items: center; gap: 8px; min-height: 200px;
+  }
+  .viz-title { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  canvas { display: block; }
+
+  .results { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+  .rcard { background: var(--surface); border: 1px solid var(--border); padding: 14px; text-align: center; }
+  .rcard .lbl { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; font-family: Arial, sans-serif; font-stretch: normal; }
+  .rcard .val { font-family: Arial, sans-serif; font-size: 28px; font-weight: 800; font-stretch: normal; }
+  .rcard .sub { font-size: 22px; font-weight: 700; font-family: Arial, sans-serif; font-stretch: normal; color: var(--text); margin-top: 8px; letter-spacing: 0px; }
+
+  .warn {
+    background: #1A0000; border: 1px solid #F44336;
+    padding: 12px 16px; font-size: 13px; color: #F44336;
+    margin-bottom: 14px; display: none; line-height: 1.7;
+  }
+  .warn.show { display: block; }
+
+  .ratio-panel {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 16px; margin-bottom: 16px; text-align: center;
+  }
+  .ratio-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+  /* Ratio: each number + boxes = one column card */
+  .ratio-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+  .ratio-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+  }
+  .ratio-num {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 42px;
+    font-weight: 900;
+    line-height: 1;
+  }
+  .rbg { display: flex; gap: 5px; }
+  .rb { width: 16px; height: 16px; border: 2px solid; }
+  .ratio-sep {
+    font-size: 32px;
+    color: var(--muted);
+    font-weight: 700;
+    padding: 0 4px;
+    margin-bottom: 16px; /* push colon up to align with numbers */
+    align-self: flex-start;
+    margin-top: 12px;
+  }
+
+  .bpanel { background: var(--surface); border: 1px solid var(--border); padding: 16px; margin-bottom: 16px; }
+  .bpanel-title { font-size: 13px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; font-family: Arial, Helvetica, sans-serif; }
+  .bitem { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid var(--border); margin-bottom: 8px; font-size: 14px; font-family: Arial, Helvetica, sans-serif; font-stretch: normal; line-height: 1.5; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .dot.ok { background: #4CAF50; }
+  .dot.no { background: #F44336; }
+  .fml { color: var(--muted); margin-left: auto; font-size: 13px; font-family: Arial, Helvetica, sans-serif; white-space: nowrap; }
+
+  footer {
+    text-align: center; padding: 16px; font-size: 14px; color: var(--muted);
+    letter-spacing: 0px; border-top: 1px solid var(--border); line-height: 2.0;
+    font-family: Arial, Helvetica, sans-serif; font-stretch: normal;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 style="font-size:28px; font-weight:900; margin-bottom:6px; font-family:Arial,sans-serif;">
+    Hydrocarbon Pattern Explorer
+  </h1>
+  <h2 style="font-size:16px; font-weight:700; color:#aaa; margin-bottom:6px; font-family:Arial,sans-serif; font-style:normal;">
+    Visual Ratio 3:2:1
+  </h2>
+  <p style="font-size:13px; color:#666; font-family:Arial,sans-serif;">
+    Simulasi Pola Visual Deret Homolog Hidrokarbon
+  </p>
+  <p style="font-size:11px; color:#444; font-family:Arial,sans-serif; margin-top:8px; letter-spacing:1px;">
+    ©️ Muhammad Alif Alfatih Fauzan · SMP Adik Irma · Jakarta · 2026
+  </p>
+</header>
+
+<div class="formula-box">Total = 2a + (n−2)b</div>
+
+<div class="unifies-label">
+  menyatukan ketiga rumus / unifies three formulas
+</div>
+
+<div class="three-formulas">
+  <div class="fcard" style="border-color:#F5A623;">
+    <div class="frule" style="color:#F5A623;">H = 2n+2</div>
+    <div class="fname">Alkana / Alkane</div>
+  </div>
+  <div class="fcard" style="border-color:#7ED321;">
+    <div class="frule" style="color:#7ED321;">H = 2n</div>
+    <div class="fname">Alkena / Alkene</div>
+  </div>
+  <div class="fcard" style="border-color:#4A90D9;">
+    <div class="frule" style="color:#4A90D9;">H = 2n−2</div>
+    <div class="fname">Alkuna / Alkyne</div>
+  </div>
+</div>
+
+<div class="controls">
+  <div class="ctrl">
+    <label>Hydrocarbon Series</label>
+    <div class="series-btns">
+      <button class="sbtn alkana active" id="btn-alkana">ALKANA</button>
+      <button class="sbtn alkena" id="btn-alkena">ALKENA</button>
+      <button class="sbtn alkuna" id="btn-alkuna">ALKUNA</button>
+    </div>
+  </div>
+  <div class="ctrl">
+    <label>Carbon Chain Length (n)</label>
+    <input type="range" id="nSlider" min="1" max="10" value="4"
+           style="accent-color:#F5A623">
+    <div class="n-val" id="nVal">n = 4</div>
+  </div>
+</div>
+
+<div id="warnBox" class="warn">
+  ⚠ This molecule does not exist in nature.<br>
+  The formula reaches a boundary that confirms:<br>
+  <strong>"Batasan Rumus = Batasan Alam"</strong> — Alif, 2026
+</div>
+
+<div class="viz">
+  <div class="viz-title" style="align-self:center;">A-B-A Tiered Rectangle — Carbon squares form one connected rectangle</div>
+  <div style="width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch;">
+    <div id="chainDiv" style="display:inline-flex; flex-direction:column; align-items:center; padding:12px; min-width:100%;"></div>
+  </div>
+</div>
+
+<div class="results">
+  <div class="rcard">
+    <div class="lbl">Calculation</div>
+    <div class="val" id="rFormula" style="font-size:14px;padding-top:6px;letter-spacing:1px;word-spacing:4px;"></div>
+  </div>
+  <div class="rcard">
+    <div class="lbl">Total H</div>
+    <div class="val" id="rH"></div>
+    <div class="sub" id="rMol"></div>
+  </div>
+  <div class="rcard">
+    <div class="lbl">In Nature?</div>
+    <div class="val" id="rExists"></div>
+    <div class="sub" id="rName"></div>
+  </div>
+</div>
+
+<div class="ratio-panel">
+  <div class="ratio-title">Visual Ratio — End Values (a)</div>
+  <div class="ratio-row">
+
+    <!-- Alkana: 3 -->
+    <div class="ratio-col">
+      <div class="ratio-num" style="color:#F5A623">3</div>
+      <div class="rbg">
+        <div class="rb" style="border-color:#F5A623;background:#F5A623"></div>
+        <div class="rb" style="border-color:#F5A623;background:#F5A623"></div>
+        <div class="rb" style="border-color:#F5A623;background:#F5A623"></div>
+      </div>
+    </div>
+
+    <div class="ratio-sep">:</div>
+
+    <!-- Alkena: 2 -->
+    <div class="ratio-col">
+      <div class="ratio-num" style="color:#7ED321">2</div>
+      <div class="rbg">
+        <div class="rb" style="border-color:#7ED321;background:#7ED321"></div>
+        <div class="rb" style="border-color:#7ED321;background:#7ED321"></div>
+      </div>
+    </div>
+
+    <div class="ratio-sep">:</div>
+
+    <!-- Alkuna: 1 -->
+    <div class="ratio-col">
+      <div class="ratio-num" style="color:#4A90D9">1</div>
+      <div class="rbg">
+        <div class="rb" style="border-color:#4A90D9;background:#4A90D9"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="bpanel">
+  <div class="bpanel-title">Boundary Conditions — n=1</div>
+  <div class="bitem">
+    <div class="dot ok"></div>
+    <div>Alkana n=1 → CH₄ (4H) — exists ✅</div>
+    <div class="fml">2(3)+(1-2)(2)=4</div>
+  </div>
+  <div class="bitem">
+    <div class="dot no"></div>
+    <div>Alkena n=1 → CH₂ (2H) — does not exist ❌</div>
+    <div class="fml">2(2)+(1-2)(2)=2</div>
+  </div>
+  <div class="bitem">
+    <div class="dot no"></div>
+    <div>Alkuna n=1 → CH₀ (0H) — does not exist ❌</div>
+    <div class="fml">2(1)+(1-2)(2)=0</div>
+  </div>
+</div>
+
+<footer>
+  <div style="display:flex; gap:0; justify-content:center; align-items:flex-start; margin-bottom:16px;">
+
+    <!-- Bahasa Indonesia — tepat 3 baris -->
+    <div style="width:340px; text-align:right; border-right:1px solid #333; padding-right:24px;">
+      <div style="font-size:12.5px; color:#aaa; line-height:2.2; font-family:Arial,sans-serif;">
+        "Satu rumus visual menyatukan tiga rumus hidrokarbon.<br>
+        Matematika konfirmasi kimia.<br>
+        Batasan rumus = batasan alam."
+      </div>
+    </div>
+
+    <!-- English — tepat 3 baris -->
+    <div style="width:340px; text-align:left; padding-left:24px;">
+      <div style="font-size:12.5px; color:#666; font-style:italic; line-height:2.2; font-family:Arial,sans-serif;">
+        "One visual formula unifies three hydrocarbon formulas.<br>
+        Mathematics confirms chemistry.<br>
+        The boundary of the formula is the boundary of nature."
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Name centered at bottom -->
+  <div style="text-align:center; font-size:14px; font-weight:700; color:#888; letter-spacing:1px; border-top:1px solid #222; padding-top:12px; font-family:Arial,sans-serif;">
+    Muhammad Alif Alfatih Fauzan · 2026
+  </div>
+
+  <!-- Copyright -->
+  <div style="text-align:center; margin-top:12px; padding-top:10px; border-top:1px solid #1A1A1A; font-family:Arial,sans-serif;">
+    <div style="font-size:12px; color:#555; margin-bottom:4px;">
+      Copyright &copy; Muhammad Alif Alfatih Fauzan 2026
+    </div>
+    <div style="font-size:12px; color:#444; margin-bottom:6px;">
+      Hak Cipta dilindungi undang-undang.
+    </div>
+    <div style="font-size:12px; color:#555;">
+      Untuk informasi, kritik dan saran hubungi email:
+      <a href="mailto:alifmathbook@gmail.com"
+         style="color:#F5A623; text-decoration:none; font-weight:700;">
+        alifmathbook@gmail.com
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const CFG = {
+  alkana: { a:3, b:2, color:'#F5A623', minN:1,
+    names:['','Metana','Etana','Propana','Butana','Pentana','Heksana','Heptana','Oktana','Nonana','Dekana'] },
+  alkena: { a:2, b:2, color:'#7ED321', minN:2,
+    names:['','—','Etena','Propena','Butena','Pentena','Heksena','Heptena','Oktena','Nonena','Dekena'] },
+  alkuna: { a:1, b:2, color:'#4A90D9', minN:2,
+    names:['','—','Etuna','Propuna','Butuna','Pentuna','Heksuna','Heptuna','Oktuna','Nonuna','Dekuna'] }
+};
+
+let series = 'alkana', n = 4;
+
+function setSeries(s) {
+  series = s;
+  document.querySelectorAll('.sbtn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.sbtn.'+s).classList.add('active');
+  document.getElementById('nSlider').style.accentColor = CFG[s].color;
+  update();
+}
+
+function setN(v) {
+  n = parseInt(v);
+  document.getElementById('nVal').textContent = 'n = ' + n;
+  update();
+}
+
+function sub(x) {
+  return String(Math.max(0,x)).split('').map(d=>'₀₁₂₃₄₅₆₇₈₉'[d]).join('');
+}
+
+function update() {
+  const s = CFG[series];
+  const { a, b, color, minN, names } = s;
+  const total = 2*a + (n-2)*b;
+  const exists = n >= minN;
+
+  document.getElementById('warnBox').classList.toggle('show', !exists);
+  document.getElementById('rFormula').textContent = `2(${a})+(${n}-2)(${b})=${Math.max(0,total)}`;
+  document.getElementById('rH').textContent = Math.max(0,total);
+  document.getElementById('rH').style.color = color;
+  document.getElementById('rMol').textContent = `C${sub(n)}H${sub(total)}`;
+  document.getElementById('rExists').textContent = exists ? '✅' : '❌';
+  document.getElementById('rName').textContent = exists ? (names[n]||series) : 'Does not exist';
+
+  drawChain(n, a, b, color, exists);
+}
+
+function drawChain(n, a, b, seriesColor, exists) {
+  var container = document.getElementById('chainDiv');
+  container.innerHTML = '';
+
+  var vizPanel = document.querySelector('.viz');
+  var availW = vizPanel ? vizPanel.clientWidth - 40 : 300;
+  availW = Math.max(160, availW);
+
+  var C = 40, H = 16, BL = 6;
+  var totalMidW = (H + BL) + n * C + (BL + H);
+  if (totalMidW > availW) {
+    var scale = availW / totalMidW;
+    C  = Math.max(18, Math.floor(C  * scale));
+    H  = Math.max(9,  Math.floor(H  * scale));
+    BL = Math.max(3,  Math.floor(BL * scale));
+  }
+
+  var fsC    = Math.max(8,  Math.floor(C * 0.30));
+  var fsH    = Math.max(6,  Math.floor(H * 0.55));
+  var fsAB   = Math.max(8,  Math.floor(C * 0.28));
+  var fsInfo = Math.max(9,  Math.floor(C * 0.26));
+  var hColor = exists ? '#DDDDDD' : '#2A2A2A';
+  var hBord  = exists ? '#DDDDDD' : '#333';
+
+  function makeDiv(css, text) {
+    var d = document.createElement('div');
+    d.style.cssText = css;
+    if (text !== undefined) d.textContent = text;
+    return d;
+  }
+
+  function makeSq(size, bg, border, text, color, fs) {
+    return makeDiv(
+      'width:'+size+'px;height:'+size+'px;background:'+bg+';border:2px solid '+border+';'+
+      'display:-webkit-flex;display:flex;-webkit-align-items:center;align-items:center;'+
+      '-webkit-justify-content:center;justify-content:center;'+
+      'font-family:Arial,sans-serif;font-size:'+fs+'px;font-weight:900;color:'+color+';'+
+      'flex-shrink:0;box-sizing:border-box;', text);
+  }
+
+  function makeVLine() {
+    return makeDiv('width:2px;height:'+BL+'px;background:#555;margin:0 auto;flex-shrink:0;');
+  }
+
+  function makeHLine() {
+    return makeDiv('width:'+BL+'px;height:2px;background:#555;flex-shrink:0;-webkit-align-self:center;align-self:center;');
+  }
+
+  function makeEmpty(w, h) {
+    return makeDiv('width:'+w+'px;height:'+h+'px;flex-shrink:0;');
+  }
+
+  function rowStyle(alignItems, alignSelf) {
+    return 'display:-webkit-flex;display:flex;'+
+           '-webkit-align-items:'+(alignItems||'center')+';align-items:'+(alignItems||'center')+';'+
+           '-webkit-justify-content:center;justify-content:center;';
+  }
+
+  var topRow = makeDiv(rowStyle('flex-end'));
+  var midRow = makeDiv(rowStyle('center'));
+  var botRow = makeDiv(rowStyle('flex-start'));
+  var lblRow = makeDiv(rowStyle('center') + 'margin-top:4px;');
+
+  // === TOP ROW ===
+  topRow.appendChild(makeEmpty(H + BL, H + BL));
+  for (var t = 0; t < n; t++) {
+    var tIsEnd   = (t === 0 || t === n-1);
+    var tHCount  = tIsEnd ? a : b;
+    var tCol = makeDiv('width:'+C+'px;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;flex-shrink:0;');
+    // alkuna end (a=1): no top H — side only
+    var showTop = tIsEnd ? (tHCount >= 2) : (tHCount >= 1);
+    if (showTop) {
+      tCol.appendChild(makeSq(H, 'transparent', hBord, 'H', hColor, fsH));
+      tCol.appendChild(makeVLine());
+    } else {
+      tCol.appendChild(makeEmpty(H, H + BL));
+    }
+    topRow.appendChild(tCol);
+  }
+  topRow.appendChild(makeEmpty(H + BL, H + BL));
+
+  // === MID ROW ===
+  // Left H: alkana(a=3) and alkuna(a=1) get side H
+  if (a === 3 || a === 1) {
+    midRow.appendChild(makeSq(H, 'transparent', hBord, 'H', hColor, fsH));
+    midRow.appendChild(makeHLine());
+  } else {
+    midRow.appendChild(makeEmpty(H + BL, H));
+  }
+
+  // Carbon squares — directly adjacent
+  for (var m = 0; m < n; m++) {
+    var mIsEnd   = (m === 0 || m === n-1);
+    var mBorder  = mIsEnd ? seriesColor : '#555';
+    var mColor   = mIsEnd ? seriesColor : '#888';
+    midRow.appendChild(makeSq(C, '#1E1E1E', mBorder, 'C', mColor, fsC));
+  }
+
+  // Right H
+  if (a === 3 || a === 1) {
+    midRow.appendChild(makeHLine());
+    midRow.appendChild(makeSq(H, 'transparent', hBord, 'H', hColor, fsH));
+  } else {
+    midRow.appendChild(makeEmpty(H + BL, H));
+  }
+
+  // === BOT ROW ===
+  botRow.appendChild(makeEmpty(H + BL, H + BL));
+  for (var bt = 0; bt < n; bt++) {
+    var btIsEnd  = (bt === 0 || bt === n-1);
+    var btHCount = btIsEnd ? a : b;
+    var bCol = makeDiv('width:'+C+'px;display:-webkit-flex;display:flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;flex-shrink:0;');
+    // alkuna end (a=1): no bottom H — side only
+    var showBot = btIsEnd ? (btHCount >= 2) : (btHCount >= 2);
+    if (showBot) {
+      bCol.appendChild(makeVLine());
+      bCol.appendChild(makeSq(H, 'transparent', hBord, 'H', hColor, fsH));
+    } else {
+      bCol.appendChild(makeEmpty(H, H + BL));
+    }
+    botRow.appendChild(bCol);
+  }
+  botRow.appendChild(makeEmpty(H + BL, H + BL));
+
+  // === LABEL ROW ===
+  lblRow.appendChild(makeEmpty(H + BL, fsAB + 4));
+  for (var lb = 0; lb < n; lb++) {
+    var lbIsEnd = (lb === 0 || lb === n-1);
+    lblRow.appendChild(makeDiv(
+      'width:'+C+'px;text-align:center;font-family:Arial,sans-serif;'+
+      'font-size:'+fsAB+'px;font-weight:900;color:'+(lbIsEnd ? seriesColor : '#555')+';flex-shrink:0;',
+      lbIsEnd ? 'A' : 'B'
+    ));
+  }
+  lblRow.appendChild(makeEmpty(H + BL, fsAB + 4));
+
+  // === ASSEMBLE ===
+  var wrap = makeDiv('display:-webkit-inline-flex;display:inline-flex;-webkit-flex-direction:column;flex-direction:column;-webkit-align-items:center;align-items:center;');
+  wrap.appendChild(topRow);
+  wrap.appendChild(midRow);
+  wrap.appendChild(botRow);
+  wrap.appendChild(lblRow);
+  wrap.appendChild(makeDiv('margin-top:8px;color:#888;font-family:Arial,sans-serif;font-size:'+fsInfo+'px;font-weight:700;text-align:center;', 'a = '+a+'     b = '+b+'     n = '+n));
+  wrap.appendChild(makeDiv('margin-top:6px;color:#333;font-family:Arial,sans-serif;font-size:10px;text-align:center;', '©️ M. Alif Alfatih Fauzan · 2026'));
+  container.appendChild(wrap);
+}
+
+// Attach all events via addEventListener for iOS Safari compatibility
+function initEvents() {
+  var btnAlkana = document.getElementById('btn-alkana');
+  var btnAlkena = document.getElementById('btn-alkena');
+  var btnAlkuna = document.getElementById('btn-alkuna');
+  var slider    = document.getElementById('nSlider');
+
+  if (btnAlkana) {
+    btnAlkana.addEventListener('click', function() { setSeries('alkana'); });
+    btnAlkena.addEventListener('click', function() { setSeries('alkena'); });
+    btnAlkuna.addEventListener('click', function() { setSeries('alkuna'); });
+  }
+  if (slider) {
+    slider.addEventListener('input',  function() { setN(this.value); });
+    slider.addEventListener('change', function() { setN(this.value); });
+  }
+  window.addEventListener('resize', function() { update(); });
+  update();
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', function() { initEvents(); });
+} else {
+  setTimeout(function() { initEvents(); }, 100);
+}
+</script>
+</body>
+</html>
