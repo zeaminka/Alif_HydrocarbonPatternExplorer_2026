@@ -197,7 +197,7 @@
     Simulasi Pola Visual Deret Homolog Hidrokarbon
   </p>
   <p style="font-size:11px; color:#444; font-family:Arial,sans-serif; margin-top:8px; letter-spacing:1px;">
-    © Muhammad Alif Alfatih Fauzan · SMP Adik Irma · Jakarta · 2026
+    ©️ Muhammad Alif Alfatih Fauzan · SMP Adik Irma · Jakarta · 2026
   </p>
 </header>
 
@@ -368,6 +368,135 @@
   </div>
 </div>
 
+<!-- MATHEMATICAL PROOF PANEL -->
+<div style="margin-bottom:16px;">
+  <button id="btnProof"
+    style="width:100%; padding:13px; background:transparent;
+           border:2px solid #555; color:#aaa;
+           font-family:Arial,sans-serif; font-size:14px;
+           font-weight:900; cursor:pointer; letter-spacing:1px;">
+    📐 PEMBUKTIAN MATEMATIS / MATHEMATICAL PROOF
+  </button>
+
+  <div id="proofPanel" style="display:none; margin-top:8px;">
+
+    <!-- Title -->
+    <div style="text-align:center; font-family:Arial,sans-serif;
+                font-size:13px; color:#888; margin-bottom:12px;
+                font-style:italic;">
+      Membuktikan bahwa Total = 2a + (n−2)b menghasilkan ketiga rumus hidrokarbon<br>
+      <span style="color:#666;">
+      Proving that Total = 2a + (n−2)b derives all three hydrocarbon formulas
+      </span>
+    </div>
+
+    <!-- Starting point -->
+    <div style="text-align:center; font-family:Arial,sans-serif;
+                font-size:14px; font-weight:900; color:#fff;
+                background:#1A1A1A; border:2px solid #fff;
+                padding:10px; margin-bottom:12px;">
+      Total = 2a + (n−2)b = 2a + nb − 2b
+    </div>
+
+    <!-- Three columns -->
+    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+
+      <!-- Alkana -->
+      <div style="border:2px solid #F5A623; background:#1A1A1A; padding:12px;">
+        <div style="font-family:Arial,sans-serif; font-size:13px;
+                    font-weight:900; color:#F5A623; text-align:center;
+                    margin-bottom:10px; border-bottom:1px solid #F5A623;
+                    padding-bottom:6px;">
+          ALKANA<br>
+          <span style="font-size:11px; font-weight:700;">a=3 · b=2</span>
+        </div>
+        <!-- Symbolic -->
+        <div style="font-family:Arial,sans-serif; font-size:12px;
+                    color:#ccc; line-height:2.0;">
+          2(3) + n(2) − 2(2)<br>
+          = 6 + 2n − 4<br>
+          <span style="color:#F5A623; font-weight:900; font-size:14px;">
+            = 2n + 2 ✅
+          </span>
+        </div>
+        <!-- Concrete value box -->
+        <div id="proofBoxAlkana" style="margin-top:10px; padding:8px;
+             border:1px solid #F5A623; background:#0A0A0A;
+             font-family:Arial,sans-serif; font-size:12px;
+             color:#ccc; line-height:2.0; text-align:center;">
+        </div>
+      </div>
+
+      <!-- Alkena -->
+      <div style="border:2px solid #7ED321; background:#1A1A1A; padding:12px;">
+        <div style="font-family:Arial,sans-serif; font-size:13px;
+                    font-weight:900; color:#7ED321; text-align:center;
+                    margin-bottom:10px; border-bottom:1px solid #7ED321;
+                    padding-bottom:6px;">
+          ALKENA<br>
+          <span style="font-size:11px; font-weight:700;">a=2 · b=2</span>
+        </div>
+        <!-- Symbolic -->
+        <div style="font-family:Arial,sans-serif; font-size:12px;
+                    color:#ccc; line-height:2.0;">
+          2(2) + n(2) − 2(2)<br>
+          = 4 + 2n − 4<br>
+          <span style="color:#7ED321; font-weight:900; font-size:14px;">
+            = 2n ✅
+          </span>
+        </div>
+        <!-- Concrete value box -->
+        <div id="proofBoxAlkena" style="margin-top:10px; padding:8px;
+             border:1px solid #7ED321; background:#0A0A0A;
+             font-family:Arial,sans-serif; font-size:12px;
+             color:#ccc; line-height:2.0; text-align:center;">
+        </div>
+      </div>
+
+      <!-- Alkuna -->
+      <div style="border:2px solid #4A90D9; background:#1A1A1A; padding:12px;">
+        <div style="font-family:Arial,sans-serif; font-size:13px;
+                    font-weight:900; color:#4A90D9; text-align:center;
+                    margin-bottom:10px; border-bottom:1px solid #4A90D9;
+                    padding-bottom:6px;">
+          ALKUNA<br>
+          <span style="font-size:11px; font-weight:700;">a=1 · b=2</span>
+        </div>
+        <!-- Symbolic -->
+        <div style="font-family:Arial,sans-serif; font-size:12px;
+                    color:#ccc; line-height:2.0;">
+          2(1) + n(2) − 2(2)<br>
+          = 2 + 2n − 4<br>
+          <span style="color:#4A90D9; font-weight:900; font-size:14px;">
+            = 2n − 2 ✅
+          </span>
+        </div>
+        <!-- Concrete value box -->
+        <div id="proofBoxAlkuna" style="margin-top:10px; padding:8px;
+             border:1px solid #4A90D9; background:#0A0A0A;
+             font-family:Arial,sans-serif; font-size:12px;
+             color:#ccc; line-height:2.0; text-align:center;">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Conclusion -->
+    <div style="text-align:center; font-family:Arial,sans-serif;
+                font-size:12px; color:#888; margin-top:12px;
+                padding:10px; border:1px solid #2A2A2A;
+                font-style:italic; line-height:1.8;">
+      Dengan b=2 tetap dan a berubah (3→2→1) —
+      satu rumus menghasilkan ketiga rumus standar.<br>
+      <span style="color:#666;">
+      With b=2 constant and a varying (3→2→1) —
+      one formula derives all three standard formulas.
+      </span>
+    </div>
+
+  </div>
+</div>
+
 <footer>
   <div style="display:flex; gap:0; justify-content:center; align-items:flex-start; margin-bottom:16px;">
 
@@ -416,7 +545,7 @@
       <a href="https://youtu.be/Oqa4wmXRQjM"
          target="_blank"
          style="color:#FF0000; text-decoration:none; font-weight:700;">
-        ▶ youtu.be/Oqa4wmXRQjM
+        ▶️ youtu.be/Oqa4wmXRQjM
       </a>
     </div>
   </div>
@@ -467,6 +596,7 @@ function update() {
   document.getElementById('rName').textContent = exists ? (names[n]||series) : 'Does not exist';
 
   drawChain(n, a, b, color, exists);
+  updateProof();
 }
 
 function drawChain(n, a, b, seriesColor, exists) {
@@ -612,8 +742,57 @@ function drawChain(n, a, b, seriesColor, exists) {
   wrap.appendChild(botRow);
   wrap.appendChild(lblRow);
   wrap.appendChild(makeDiv('margin-top:8px;color:#888;font-family:Arial,sans-serif;font-size:'+fsInfo+'px;font-weight:700;text-align:center;', 'a = '+a+'     b = '+b+'     n = '+n));
-  wrap.appendChild(makeDiv('margin-top:6px;color:#333;font-family:Arial,sans-serif;font-size:10px;text-align:center;', '© M. Alif Alfatih Fauzan · 2026'));
+  wrap.appendChild(makeDiv('margin-top:6px;color:#333;font-family:Arial,sans-serif;font-size:10px;text-align:center;', '©️ M. Alif Alfatih Fauzan · 2026'));
   container.appendChild(wrap);
+}
+
+function updateProof() {
+  var boxA = document.getElementById('proofBoxAlkana');
+  var boxE = document.getElementById('proofBoxAlkena');
+  var boxU = document.getElementById('proofBoxAlkuna');
+  if (!boxA) return;
+
+  var nv = n;
+
+  // Alkana: a=3, b=2 → H = 2n+2
+  var hA = 2*3 + (nv-2)*2;
+  boxA.innerHTML =
+    'n = <b style="color:#F5A623">' + nv + '</b><br>' +
+    '2(3) + ' + nv + '(2) − 2(2)<br>' +
+    '= 6 + ' + (nv*2) + ' − 4<br>' +
+    '<span style="color:#F5A623;font-weight:900;font-size:14px;">' +
+    '= ' + hA + ' ✅</span><br>' +
+    '<span style="color:#666;font-size:11px;">C' + sub(nv) + 'H' + sub(hA) + '</span>';
+
+  // Alkena: a=2, b=2 → H = 2n
+  var hE = 2*2 + (nv-2)*2;
+  if (nv >= 2) {
+    boxE.innerHTML =
+      'n = <b style="color:#7ED321">' + nv + '</b><br>' +
+      '2(2) + ' + nv + '(2) − 2(2)<br>' +
+      '= 4 + ' + (nv*2) + ' − 4<br>' +
+      '<span style="color:#7ED321;font-weight:900;font-size:14px;">' +
+      '= ' + hE + ' ✅</span><br>' +
+      '<span style="color:#666;font-size:11px;">C' + sub(nv) + 'H' + sub(hE) + '</span>';
+  } else {
+    boxE.innerHTML =
+      '<span style="color:#F44336;font-size:11px;">n=1 tidak ada di alam<br>does not exist</span>';
+  }
+
+  // Alkuna: a=1, b=2 → H = 2n-2
+  var hU = 2*1 + (nv-2)*2;
+  if (nv >= 2) {
+    boxU.innerHTML =
+      'n = <b style="color:#4A90D9">' + nv + '</b><br>' +
+      '2(1) + ' + nv + '(2) − 2(2)<br>' +
+      '= 2 + ' + (nv*2) + ' − 4<br>' +
+      '<span style="color:#4A90D9;font-weight:900;font-size:14px;">' +
+      '= ' + Math.max(0,hU) + ' ✅</span><br>' +
+      '<span style="color:#666;font-size:11px;">C' + sub(nv) + 'H' + sub(hU) + '</span>';
+  } else {
+    boxU.innerHTML =
+      '<span style="color:#F44336;font-size:11px;">n=1 tidak ada di alam<br>does not exist</span>';
+  }
 }
 
 var compareMode = false;
@@ -762,6 +941,18 @@ function initEvents() {
     btnAlkana.addEventListener('click', function() { setSeries('alkana'); });
     btnAlkena.addEventListener('click', function() { setSeries('alkena'); });
     btnAlkuna.addEventListener('click', function() { setSeries('alkuna'); });
+  }
+
+  var btnProof = document.getElementById('btnProof');
+  if (btnProof) {
+    btnProof.addEventListener('click', function() {
+      var panel = document.getElementById('proofPanel');
+      var isOpen = panel.style.display !== 'none';
+      panel.style.display = isOpen ? 'none' : 'block';
+      btnProof.style.background      = isOpen ? 'transparent' : '#1A1A1A';
+      btnProof.style.borderColor     = isOpen ? '#555' : '#FFFFFF';
+      btnProof.style.color           = isOpen ? '#aaa' : '#FFFFFF';
+    });
   }
 
   if (btnSingle) {
